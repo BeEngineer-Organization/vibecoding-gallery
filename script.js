@@ -29,6 +29,83 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
 }
 
+function fitCtaTitleToWidth(titleEl, { minPx = 8 } = {}) {
+  if (!titleEl) return;
+
+  // CSSの指定に戻して正しい計測をする
+  titleEl.style.fontSize = "";
+
+  const computed = window.getComputedStyle(titleEl);
+  let fontSize = Number.parseFloat(computed.fontSize || "0");
+  if (!Number.isFinite(fontSize) || fontSize <= 0) return;
+
+  const lines = Array.from(titleEl.querySelectorAll(".cta__titleLine"));
+  const isOverflowing = () => {
+    // titleEl 自体が shrink-to-fit になっていると clientWidth が当てにならないので、親幅を基準にする
+    const w = titleEl.parentElement?.clientWidth || titleEl.clientWidth || 0;
+    if (w <= 0) return false;
+    const maxLine = lines.length
+      ? Math.max(...lines.map((l) => l.scrollWidth || 0))
+      : titleEl.scrollWidth || 0;
+    return maxLine > w * 0.995;
+  };
+
+  // 念のため回数制限（無限ループ防止）
+  let guard = 120;
+  while (isOverflowing() && fontSize > minPx && guard-- > 0) {
+    fontSize = Math.max(minPx, fontSize - 0.25);
+    titleEl.style.fontSize = `${fontSize}px`;
+  }
+}
+
+function runCtaTitleFit() {
+  const title = document.querySelector(".cta__title");
+  fitCtaTitleToWidth(title, { minPx: 6 });
+}
+
+function runSplash() {
+  const splash = document.getElementById("splash");
+  if (!splash) return;
+
+  const reduce = prefersReducedMotion();
+  const START_WHITE_MS = 180; // 最初は白背景だけ見せる
+  const FADE_IN_MS = 450;
+  const HOLD_MS = 2000; // 表示時間（要望：2sほど）
+  const FADE_OUT_MS = 450;
+
+  splash.setAttribute("aria-hidden", "false");
+  document.body.classList.add("is-splash-open");
+
+  // 最初は白背景のみ（中身はCSSでopacity:0）→ 少し待って中身をフェードイン
+  window.setTimeout(() => {
+    requestAnimationFrame(() => {
+      splash.classList.add("is-active");
+    });
+  }, reduce ? 0 : START_WHITE_MS);
+
+  const totalWait = (reduce ? 0 : START_WHITE_MS + FADE_IN_MS) + HOLD_MS;
+  window.setTimeout(() => {
+    // フェードアウト
+    splash.classList.add("is-exiting");
+    splash.classList.remove("is-active");
+
+    const cleanup = () => {
+      splash.removeEventListener("transitionend", cleanup);
+      splash.remove();
+      document.body.classList.remove("is-splash-open");
+    };
+
+    if (reduce) {
+      cleanup();
+      return;
+    }
+
+    splash.addEventListener("transitionend", cleanup, { once: true });
+    // transitionend が発火しない場合の保険
+    window.setTimeout(cleanup, FADE_OUT_MS + 120);
+  }, totalWait);
+}
+
 function smoothScrollToId(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -166,6 +243,24 @@ document.addEventListener("keydown", (e) => {
 window.addEventListener("resize", () => {
   if (!modal.classList.contains("is-open")) return;
   document.body.style.top = `-${scrollY}px`;
+});
+
+// 起動時：スプラッシュ（フェードイン→少し表示→フェードアウト）
+runSplash();
+// CTAタイトル：PC→タブレット→SPで意図しない改行が出ないように、はみ出し時は自動縮小
+// 初期レイアウト確定後に当てる（フォント/描画タイミング差の吸収）
+requestAnimationFrame(() => requestAnimationFrame(runCtaTitleFit));
+window.setTimeout(runCtaTitleFit, 250);
+window.addEventListener("resize", () => {
+  window.clearTimeout(runCtaTitleFit._t);
+  runCtaTitleFit._t = window.setTimeout(runCtaTitleFit, 120);
+});
+// フォント読み込み後に幅が変わってクリップされるのを防ぐ
+window.addEventListener("load", runCtaTitleFit);
+document.fonts?.ready?.then?.(runCtaTitleFit);
+// ブレイクポイント切替の瞬間にも追従（SP切替時のクリップ対策）
+window.matchMedia?.("(max-width: 600px)")?.addEventListener?.("change", () => {
+  requestAnimationFrame(() => requestAnimationFrame(runCtaTitleFit));
 });
 
 

@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#004433" />
     <title>生徒のバイブコーディング作品紹介｜BeEngineer</title>
+    <script>
+      // JS無効時にスプラッシュが残り続けないよう、JSが動く環境だけ表示制御する
+      document.documentElement.classList.add("js");
+    </script>
     <meta
       name="description"
-      content="プログラミング未経験から始めた生徒たちが、AIと一緒に作り上げた作品集。①→③にかけて成長が伝わるシングルページ。"
+      content="プログラミング未経験から始めた生徒たちが、AIと一緒に作り上げた作品集。"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,6 +22,28 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <!-- Page transition splash -->
+    <div class="splash" id="splash" aria-hidden="true">
+      <div class="splash__inner">
+        <img
+          class="splash__logo"
+          src="img/logo_color.svg"
+          alt="BeEngineer"
+          width="240"
+          height="62"
+          decoding="async"
+          loading="eager"
+        />
+        <div class="splash__copy" aria-label="VIBE CODING スプラッシュ">
+          <div class="splash__rule" aria-hidden="true"></div>
+          <p class="splash__title">VIBE CORDING</p>
+          <p class="splash__sub">AIでWebサイトを作ってみよう！</p>
+          <p class="splash__date">2/11水・祝：開催！</p>
+          <div class="splash__rule" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+
     <a class="skip" href="#works">作品一覧へスキップ</a>
 
     <header class="header">
@@ -64,29 +90,6 @@
             <p class="hero__sub">
               プログラミング未経験から始めた生徒たちが、AIと一緒に作り上げた作品集です。
             </p>
-          </div>
-
-          <div class="hero__panel" aria-hidden="true">
-            <div class="panel">
-              <div class="panel__row">
-                <span class="dot dot--accent"></span>
-                <span class="panel__label">Prompt</span>
-              </div>
-              <div class="panel__code">
-                <span class="panel__line">Create a modern landing page…</span>
-                <span class="panel__line">Use green accents &amp; clean cards…</span>
-                <span class="panel__line">Make it responsive for mobile…</span>
-              </div>
-              <div class="panel__row panel__row--right">
-                <span class="panel__label">Result</span>
-                <span class="dot"></span>
-              </div>
-              <div class="panel__bars">
-                <div class="bar bar--1"></div>
-                <div class="bar bar--2"></div>
-                <div class="bar bar--3"></div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -159,10 +162,11 @@
         <div class="container cta__inner">
           <div class="cta__copy">
             <h2 class="cta__title">
-              バイブコーディングに挑戦したい方はこちら！ <br>春の無料体験会 開催中
+              <span class="cta__titleLine">バイブコーディングに挑戦したい方はこちら！</span>
+              <span class="cta__titleLine">春の無料体験会 開催中</span>
             </h2>
             <p class="cta__sub">
-              初心者でもOK。AIと一緒に、最初の一歩を踏み出しましょう。
+              初心者でもOK。<br class="only-sp">AIと一緒に、最初の一歩を踏み出しましょう。
             </p>
           </div>
           <div class="cta__actions">

@@ -34,6 +34,74 @@ body{
 a{ color: inherit; text-decoration: none; }
 button{ font: inherit; }
 
+.splash{
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #fff;
+  padding: 28px;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity .45s ease;
+}
+html.js .splash{
+  display: grid;
+  place-items: center;
+}
+body.is-splash-open{
+  overflow: hidden;
+}
+.splash.is-exiting{
+  opacity: 0;
+}
+.splash__inner{
+  width: 100%;
+  max-width: 560px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.splash.is-active .splash__inner{
+  opacity: 1;
+  transform: translateY(0);
+}
+.splash__logo{
+  display: inline-block;
+  width: 62vw;
+  max-width: 240px;
+  height: auto;
+  margin-bottom: 18px;
+}
+.splash__copy{
+  display: grid;
+  gap: 10px;
+}
+.splash__rule{
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 68, 51, .40), transparent);
+}
+.splash__title{
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  color: var(--main);
+}
+.splash__sub{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(0, 68, 51, .86);
+}
+.splash__date{
+  margin: 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: rgba(0, 68, 51, .92);
+}
+
 .container{
   width: min(var(--container), calc(100% - 40px));
   margin-inline: auto;
@@ -133,10 +201,15 @@ button{ font: inherit; }
 .hero__inner{
   position: relative;
   display: grid;
-  grid-template-columns: 1.12fr .88fr;
+  grid-template-columns: 1fr;
   gap: 26px;
   /* 左カラム（hero__copy）の上辺に合わせて、右のpanelも上揃え */
   align-items: start;
+}
+.hero__copy{
+  max-width: 860px;
+  margin-inline: auto;
+  text-align: center;
 }
 .hero__eyebrow{
   display: inline-flex;
@@ -148,6 +221,9 @@ button{ font: inherit; }
   text-transform: uppercase;
   color: rgba(0, 68, 51, .86);
 }
+.hero__copy .hero__eyebrow{
+  justify-content: center;
+}
 .hero__eyebrow::before{
   content: "";
   width: 34px;
@@ -157,16 +233,18 @@ button{ font: inherit; }
 }
 .hero__title{
   margin: 0 0 10px;
-  font-size: clamp(22px, 5.2vw, 44px);
+  font-size: 44px;
   line-height: 1.18;
   letter-spacing: -.01em;
-  white-space: nowrap;
+  white-space: normal;
+  text-wrap: balance;
 }
 .hero__sub{
   margin: 0 0 18px;
   color: var(--muted);
   font-size: 15px;
   max-width: 42em;
+  margin-inline: auto;
 }
 
 /* Hero panel */
@@ -175,7 +253,8 @@ button{ font: inherit; }
   margin-top: 28px;
 }
 .panel{
-  width: min(420px, 100%);
+  width: 100%;
+  max-width: 420px;
   border-radius: var(--radius2);
   border: 1px solid rgba(0, 68, 51, .16);
   background:
@@ -535,7 +614,8 @@ button{ font: inherit; }
 /* CTA / Footer-style section */
 .cta{
   position: relative;
-  overflow: hidden;
+  /* テキストの見切れを防ぐため、全体のクリップはしない */
+  overflow: visible;
   background: var(--main);
   color: #fff;
   padding: 34px 0;
@@ -571,9 +651,14 @@ button{ font: inherit; }
 }
 .cta__title{
   margin: 0 0 8px;
-  font-size: clamp(18px, 3.8vw, 26px);
+  font-size: 26px;
   line-height: 1.25;
   letter-spacing: -.01em;
+}
+.cta__titleLine{
+  display: block;
+  white-space: nowrap; /* 2行以外の意図しない折り返しを防ぐ */
+  max-width: 100%;
 }
 .cta__sub{
   margin: 0;
@@ -581,9 +666,10 @@ button{ font: inherit; }
   font-size: 14px;
 }
 .cta__actions{
-  justify-self: end;
-  text-align: right;
+  justify-self: center;
+  text-align: center;
 }
+.only-sp{ display: none; }
 .btn--cta{
   background: #fff;
   color: var(--main);
@@ -698,30 +784,42 @@ body.is-modal-open{
 }
 
 /* Responsive */
-@media (max-width: 940px){
+@media (max-width: 798px){
   .hero__inner{ grid-template-columns: 1fr; }
-  .hero__title{ white-space: nowrap; }
+  .hero__title{ white-space: normal; font-size: 34px; }
   .cta__inner{ grid-template-columns: 1fr; }
-  .cta__actions{ justify-self: start; text-align: left; }
+  .cta__copy{
+    /* タブレット：グループは中央、内部は左揃え（cta__title と cta__sub の左端を揃える） */
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    justify-items: start;
+    text-align: left;
+  }
+  .cta__title,
+  .cta__sub{ display: inline-block; max-width: 100%; }
   .steps{ grid-template-columns: 1fr; }
   .workCard{ min-height: auto; }
 }
 
-@media (max-width: 520px){
-  .container{ width: min(var(--container), calc(100% - 28px)); }
+@media (max-width: 600px){
+  /* 全サイズで左右20px（合計40px）を維持する */
+  .container{ width: min(var(--container), calc(100% - 40px)); }
   .header__inner{ padding: 10px 0; }
   .brand{ min-height: 36px; }
   .brand__logo{ height: 24px; }
   .header__nav{ gap: 6px; }
+  /* 600px以下はここで1回だけ切り替え、あとは clamp() で滑らかに追従 */
   .navlink{ padding: 9px 10px; font-size: 13px; }
   .modal__dialog{
-    width: calc(100vw - 16px);
-    height: calc(100vh - 16px);
+    /* PC同様に「画面に対する比率」で決定（画面いっぱいにしない） */
+    width: 92vw;
+    height: 80vh;
     border-radius: 16px;
   }
   .hero__inner{ gap: 18px; }
   .hero__title{
-    font-size: clamp(16px, 4.8vw, 28px);
+    font-size: 28px;
     letter-spacing: -.02em;
   }
   .hero__sub{ font-size: 14px; margin-bottom: 14px; }
@@ -743,21 +841,40 @@ body.is-modal-open{
   .workCard__desc{ font-size: 13px; }
 
   .cta{ padding: 28px 0; }
-  .cta__title{ font-size: clamp(17px, 4.8vw, 22px); }
+  .cta__inner{ grid-template-columns: 1fr; }
+  .cta__copy{
+    /* SP：グループは中央、内部は左揃え（cta__title と cta__sub の左端を揃える） */
+    width: 100%;
+    display: grid;
+    justify-content: center;
+    justify-items: start;
+    text-align: left;
+  }
+  .cta__title,
+  .cta__sub{ display: inline-block; max-width: 100%; }
+  .cta__title{
+    /* SP：まずは大きめに表示し、溢れる場合はJSで自動縮小 */
+    font-size: 22px;
+    letter-spacing: -.02em;
+    line-height: 1.18;
+  }
   .cta__sub{ font-size: 13px; }
-  .btn--cta{ width: 100%; }
-  .cta__note{ font-size: 11px; }
-}
-
-@media (max-width: 380px){
-  .hero__title{ font-size: clamp(14px, 4.5vw, 22px); }
-  .navlink{ font-size: 12px; padding: 8px 9px; }
+  .only-sp{ display: inline; }
+  .cta__actions{
+    justify-self: center;
+    text-align: center;
+    width: 100%;
+  }
+  /* 600px付近でボタン仕様が変わらないよう、SPでも幅は固定しない */
+  .cta__note{ font-size: 11px; text-align: center; }
 }
 
 @media (prefers-reduced-motion: reduce){
   *{ scroll-behavior: auto !important; }
   .bar::after{ animation: none; }
   .workCard, .btn{ transition: none; }
+  .splash{ transition: none; }
+  .splash__inner{ transition: none; }
 }
 
 

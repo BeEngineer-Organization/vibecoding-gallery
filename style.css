@@ -19,6 +19,8 @@ html{
   scroll-behavior: smooth;
   /* sticky header 分の余白（アンカー移動時に見出しが隠れないように） */
   scroll-padding-top: 78px;
+  scroll-padding-top: calc(78px + constant(safe-area-inset-top));
+  scroll-padding-top: calc(78px + env(safe-area-inset-top));
 }
 body{
   margin: 0;
@@ -101,6 +103,12 @@ body.is-splash-open{
   font-weight: 900;
   color: rgba(0, 68, 51, .92);
 }
+.splash__note{
+  margin: 0;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(0, 68, 51, .84);
+}
 
 .container{
   width: min(var(--container), calc(100% - 40px));
@@ -117,7 +125,8 @@ body.is-splash-open{
 }
 .skip:focus{
   left: 14px;
-  top: 12px;
+  top: calc(12px + constant(safe-area-inset-top));
+  top: calc(12px + env(safe-area-inset-top));
   width: auto;
   height: auto;
   z-index: 9999;
@@ -131,11 +140,18 @@ body.is-splash-open{
 /* Header */
 .header{
   position: sticky;
-  top: 0;
+  /* ノッチ（セーフエリア）ぶんだけ下げて常に隠れないようにする */
+  top: constant(safe-area-inset-top);
+  top: env(safe-area-inset-top);
   z-index: 50;
   background: rgba(255,255,255,.86);
   border-bottom: 1px solid rgba(0, 68, 51, .10);
   backdrop-filter: blur(12px);
+  /* 横向きのノッチも考慮（左右） */
+  padding-left: constant(safe-area-inset-left);
+  padding-left: env(safe-area-inset-left);
+  padding-right: constant(safe-area-inset-right);
+  padding-right: env(safe-area-inset-right);
 }
 .header__inner{
   display: flex;
@@ -143,6 +159,23 @@ body.is-splash-open{
   justify-content: space-between;
   gap: 16px;
   padding: 14px 0;
+}
+.header__noticeWrap{
+  padding: 0 0 10px;
+  display: flex;
+  justify-content: center;
+}
+.header__notice{
+  margin: 0;
+  width: fit-content;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(0, 128, 0, .10);
+  border: 1px solid rgba(0, 128, 0, .22);
+  color: rgba(0, 68, 51, .92);
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: .02em;
 }
 .brand{
   display: inline-flex;
@@ -179,6 +212,18 @@ body.is-splash-open{
 .navlink--cta{
   background: rgba(0, 68, 51, .08);
   border: 1px solid rgba(0, 68, 51, .18);
+  /* ヘッダーCTAは2行（縦積み） */
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.05;
+  gap: 2px;
+  padding: 8px 12px;
+}
+.navlink--cta .navlink__line{
+  display: block;
+  white-space: nowrap;
 }
 
 /* Hero */
@@ -683,9 +728,22 @@ body.is-splash-open{
   box-shadow: 0 22px 60px rgba(0, 0, 0, .28);
 }
 .cta__note{
-  margin: 8px 0 0;
-  font-size: 12px;
-  opacity: .78;
+  margin: 10px 0 0;
+  /* PC幅でボタン横に回り込まないよう block に固定 */
+  display: block;
+  width: min(520px, 100%);
+  margin-inline: auto;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid rgba(255,255,255,.70);
+  color: rgba(0, 68, 51, .96);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .01em;
+  line-height: 1.45;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(0,0,0,.14);
 }
 
 /* Modal */
@@ -806,6 +864,7 @@ body.is-modal-open{
   /* 全サイズで左右20px（合計40px）を維持する */
   .container{ width: min(var(--container), calc(100% - 40px)); }
   .header__inner{ padding: 10px 0; }
+  .header__noticeWrap{ padding-bottom: 8px; }
   .brand{ min-height: 36px; }
   .brand__logo{ height: 24px; }
   .header__nav{ gap: 6px; }

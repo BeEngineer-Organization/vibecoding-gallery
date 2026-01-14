@@ -60,7 +60,14 @@ function fitCtaTitleToWidth(titleEl, { minPx = 8 } = {}) {
 
 function runCtaTitleFit() {
   const title = document.querySelector(".cta__title");
-  fitCtaTitleToWidth(title, { minPx: 6 });
+  // PC/タブレットでは元の見た目を維持（縮小はSPでのみ有効化）
+  const isSp = window.matchMedia?.("(max-width: 600px)")?.matches === true;
+  if (!isSp) {
+    if (title) title.style.fontSize = "";
+    return;
+  }
+
+  fitCtaTitleToWidth(title, { minPx: 10 });
 }
 
 function runSplash() {

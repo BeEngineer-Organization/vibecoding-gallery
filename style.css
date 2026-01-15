@@ -161,7 +161,8 @@ body.is-splash-open{
   padding: 14px 0;
 }
 .header__noticeWrap{
-  padding: 0 0 10px;
+  flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: center;
 }
@@ -176,6 +177,7 @@ body.is-splash-open{
   font-weight: 900;
   font-size: 12px;
   letter-spacing: .02em;
+  white-space: nowrap;
 }
 .brand{
   display: inline-flex;
@@ -210,8 +212,11 @@ body.is-splash-open{
   background: rgba(0, 128, 0, .08);
 }
 .navlink--cta{
-  background: rgba(0, 68, 51, .08);
-  border: 1px solid rgba(0, 68, 51, .18);
+  background: linear-gradient(180deg, rgba(0, 68, 51, 1), rgba(0, 68, 51, .86));
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .18);
+  color: #fff;
+  cursor: pointer;
   /* ヘッダーCTAは2行（縦積み） */
   display: inline-flex;
   flex-direction: column;
@@ -220,6 +225,20 @@ body.is-splash-open{
   line-height: 1.05;
   gap: 2px;
   padding: 8px 12px;
+}
+.navlink--cta:hover{
+  background: linear-gradient(180deg, rgba(0, 163, 90, .98), rgba(0, 68, 51, .88));
+  border-color: rgba(255,255,255,.26);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .22);
+  transform: translateY(-1px);
+}
+.navlink--cta:active{
+  transform: translateY(0);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+}
+.navlink--cta:focus-visible{
+  outline: 3px solid rgba(0, 163, 90, .45);
+  outline-offset: 3px;
 }
 .navlink--cta .navlink__line{
   display: block;
@@ -716,16 +735,50 @@ body.is-splash-open{
 }
 .only-sp{ display: none; }
 .btn--cta{
+  /* CTA背景（濃色）と同化しないよう、白ベースでボタン感を強める */
   background: #fff;
-  color: var(--main);
-  border-color: rgba(255,255,255,.10);
-  padding: 14px 16px;
+  color: rgba(0, 68, 51, .96);
+  border: 2px solid rgba(255,255,255,.72);
+  padding: 14px 18px;
   border-radius: 16px;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, .22);
+  /* 濃色背景で“影”が埋もれないよう、白いグロー＋濃い影の二重にする */
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.16),
+    0 18px 44px rgba(0, 0, 0, .38);
+  cursor: pointer;
+  flex-direction: column;
+  text-align: center;
+  gap: 4px;
+}
+.btn--cta .btn__line{
+  display: block;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+.btn--cta .btn__sub{
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+  opacity: .90;
 }
 .btn--cta:hover{
   transform: translateY(-1px);
-  box-shadow: 0 22px 60px rgba(0, 0, 0, .28);
+  background: rgba(255,255,255,.94);
+  border-color: rgba(255,255,255,.92);
+  box-shadow:
+    0 0 0 5px rgba(255,255,255,.22),
+    0 24px 66px rgba(0, 0, 0, .42);
+}
+.btn--cta:active{
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.16),
+    0 14px 34px rgba(0, 0, 0, .36);
+}
+.btn--cta:focus-visible{
+  outline: 3px solid rgba(255,255,255,.70);
+  outline-offset: 3px;
 }
 .cta__note{
   margin: 10px 0 0;

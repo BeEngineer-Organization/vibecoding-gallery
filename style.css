@@ -19,8 +19,6 @@ html{
   scroll-behavior: smooth;
   /* sticky header 分の余白（アンカー移動時に見出しが隠れないように） */
   scroll-padding-top: 78px;
-  scroll-padding-top: calc(78px + constant(safe-area-inset-top));
-  scroll-padding-top: calc(78px + env(safe-area-inset-top));
 }
 body{
   margin: 0;
@@ -37,77 +35,73 @@ a{ color: inherit; text-decoration: none; }
 button{ font: inherit; }
 
 .splash{
-  display: none;
+  /* removed */
+}
+
+.announceToast{
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #fff;
-  padding: 28px;
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity .45s ease;
-}
-html.js .splash{
   display: grid;
   place-items: center;
-}
-body.is-splash-open{
-  overflow: hidden;
-}
-.splash.is-exiting{
+  padding: 20px;
+  pointer-events: none;
   opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s ease, transform .35s ease;
 }
-.splash__inner{
-  width: 100%;
-  max-width: 560px;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity .45s ease, transform .45s ease;
-}
-.splash.is-active .splash__inner{
+.announceToast.is-show{
   opacity: 1;
   transform: translateY(0);
 }
-.splash__logo{
-  display: inline-block;
-  width: 62vw;
-  max-width: 240px;
-  height: auto;
-  margin-bottom: 18px;
+.announceToast.is-hide{
+  opacity: 0;
+  transform: translateY(8px);
 }
-.splash__copy{
-  display: grid;
-  gap: 10px;
+.announceToast__card{
+  pointer-events: auto;
+  width: 100%;
+  max-width: 560px;
+  background: rgba(255,255,255,.98);
+  border: 1px solid rgba(0, 68, 51, .16);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.18);
+  padding: 16px 44px 14px 16px;
+  text-align: center;
+  position: relative;
 }
-.splash__rule{
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 68, 51, .40), transparent);
-}
-.splash__title{
+.announceToast__line{
   margin: 0;
+  font-weight: 900;
+  color: rgba(0, 68, 51, .96);
+  letter-spacing: .01em;
   font-size: 20px;
-  font-weight: 900;
-  letter-spacing: .18em;
-  color: var(--main);
+  line-height: 1.25;
 }
-.splash__sub{
-  margin: 0;
-  font-size: 14px;
-  font-weight: 800;
-  color: rgba(0, 68, 51, .86);
+.announceToast__line + .announceToast__line{ margin-top: 6px; }
+.announceToast__line{ font-size: 18px; }
+@media (max-width: 600px){
+  .announceToast__line{ font-size: 16px; }
 }
-.splash__date{
-  margin: 0;
-  font-size: 14px;
-  font-weight: 900;
+.announceToast__close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 68, 51, .14);
+  background: rgba(255,255,255,.90);
   color: rgba(0, 68, 51, .92);
+  cursor: pointer;
 }
-.splash__note{
-  margin: 0;
-  font-size: 12px;
-  font-weight: 800;
-  color: rgba(0, 68, 51, .84);
+.announceToast__close:hover{
+  background: rgba(0, 128, 0, .08);
+  border-color: rgba(0, 128, 0, .22);
+}
+.announceToast__close:focus-visible{
+  outline: 3px solid rgba(0, 128, 0, .30);
+  outline-offset: 3px;
 }
 
 .container{
@@ -125,8 +119,7 @@ body.is-splash-open{
 }
 .skip:focus{
   left: 14px;
-  top: calc(12px + constant(safe-area-inset-top));
-  top: calc(12px + env(safe-area-inset-top));
+  top: 12px;
   width: auto;
   height: auto;
   z-index: 9999;
@@ -140,18 +133,11 @@ body.is-splash-open{
 /* Header */
 .header{
   position: sticky;
-  /* ノッチ（セーフエリア）ぶんだけ下げて常に隠れないようにする */
-  top: constant(safe-area-inset-top);
-  top: env(safe-area-inset-top);
+  top: 0;
   z-index: 50;
   background: rgba(255,255,255,.86);
   border-bottom: 1px solid rgba(0, 68, 51, .10);
   backdrop-filter: blur(12px);
-  /* 横向きのノッチも考慮（左右） */
-  padding-left: constant(safe-area-inset-left);
-  padding-left: env(safe-area-inset-left);
-  padding-right: constant(safe-area-inset-right);
-  padding-right: env(safe-area-inset-right);
 }
 .header__inner{
   display: flex;
@@ -784,7 +770,8 @@ body.is-splash-open{
   margin: 10px 0 0;
   /* PC幅でボタン横に回り込まないよう block に固定 */
   display: block;
-  width: min(520px, 100%);
+  width: 100%;
+  max-width: 520px;
   margin-inline: auto;
   padding: 10px 12px;
   border-radius: 14px;
@@ -909,7 +896,7 @@ body.is-modal-open{
   }
   .cta__title,
   .cta__sub{ display: inline-block; max-width: 100%; }
-  .steps{ grid-template-columns: 1fr; }
+  .steps{ grid-template-columns: repeat(2, 1fr); }
   .workCard{ min-height: auto; }
 }
 
@@ -952,33 +939,7 @@ body.is-modal-open{
   .workCard__title{ font-size: 16px; }
   .workCard__desc{ font-size: 13px; }
 
-  .cta{ padding: 28px 0; }
-  .cta__inner{ grid-template-columns: 1fr; }
-  .cta__copy{
-    /* SP：グループは中央、内部は左揃え（cta__title と cta__sub の左端を揃える） */
-    width: 100%;
-    display: grid;
-    justify-content: center;
-    justify-items: start;
-    text-align: left;
-  }
-  .cta__title,
-  .cta__sub{ display: inline-block; max-width: 100%; }
-  .cta__title{
-    /* SP：まずは大きめに表示し、溢れる場合はJSで自動縮小 */
-    font-size: 22px;
-    letter-spacing: -.02em;
-    line-height: 1.18;
-  }
-  .cta__sub{ font-size: 13px; }
-  .only-sp{ display: inline; }
-  .cta__actions{
-    justify-self: center;
-    text-align: center;
-    width: 100%;
-  }
-  /* 600px付近でボタン仕様が変わらないよう、SPでも幅は固定しない */
-  .cta__note{ font-size: 11px; text-align: center; }
+  .steps{ grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce){

@@ -2,19 +2,21 @@
  * 作品URLはここだけ書き換えればOK（GitHub Pages向け）
  */
 const URLS = {
-  springLP:
-    "https://lp.be-engineer.tech/pages/new_year_2026.html?utm_source=flyer&utm_medium=offline&utm_campaign=spring_event_2026&utm_term=programming_camp&utm_content=text_link",
   works: {
-    work1: "https://v0-programming-language-website-dusky.vercel.app/",
-    work2: "https://v0-ghost-website.vercel.app/",
-    work3: "https://v0-japanese-castles-website.vercel.app/",
+    work1: "https://v0-ark-beta.vercel.app/",
+    work2: "https://v0-toilet-information-website.vercel.app/",
+    work3: "https://v0-mother-website-build.vercel.app/",
+    work4: "https://v0-green-site-requirements.vercel.app/",
+    work5: "https://v0-gorilla-website-mu.vercel.app/",
   },
 };
 
 const TITLES = {
-  work1: "中学１年生（１年目）｜Programming Language Website",
-  work2: "中学３年生（２年目）｜Ghost Website",
-  work3: "高校１年生（２年目）｜Japanese Castles Website",
+  work1: "ARK 攻略ガイド - 恐竜世界で生き残れ",
+  work2: "トイレの世界へようこそ | トイレ情報サイト",
+  work3: "MOTHER - すこし ふしぎな 世界へ。",
+  work4: "みどりの効果と種類 | MIDORI",
+  work5: "GORILLA INTELLIGENCE | ゴリラの知性と未来",
 };
 
 const modal = document.getElementById("workModal");
@@ -29,88 +31,35 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
 }
 
-function fitCtaTitleToWidth(titleEl, { minPx = 8 } = {}) {
-  if (!titleEl) return;
+function runAnnouncementToast() {
+  const toast = document.getElementById("announceToast");
+  if (!toast) return;
 
-  // CSSの指定に戻して正しい計測をする
-  titleEl.style.fontSize = "";
+  const closeBtn = toast.querySelector(".announceToast__close");
+  const reduce = prefersReducedMotion();
+  const FADE_MS = 350;
+  const HOLD_MS = 1800;
 
-  const computed = window.getComputedStyle(titleEl);
-  let fontSize = Number.parseFloat(computed.fontSize || "0");
-  if (!Number.isFinite(fontSize) || fontSize <= 0) return;
-
-  const lines = Array.from(titleEl.querySelectorAll(".cta__titleLine"));
-  const isOverflowing = () => {
-    // titleEl 自体が shrink-to-fit になっていると clientWidth が当てにならないので、親幅を基準にする
-    const w = titleEl.parentElement?.clientWidth || titleEl.clientWidth || 0;
-    if (w <= 0) return false;
-    const maxLine = lines.length
-      ? Math.max(...lines.map((l) => l.scrollWidth || 0))
-      : titleEl.scrollWidth || 0;
-    return maxLine > w * 0.995;
+  const hide = () => {
+    toast.classList.add("is-hide");
+    toast.classList.remove("is-show");
+    toast.setAttribute("aria-hidden", "true");
+    const cleanup = () => {
+      toast.removeEventListener("transitionend", cleanup);
+      toast.remove();
+    };
+    if (reduce) return cleanup();
+    toast.addEventListener("transitionend", cleanup, { once: true });
+    window.setTimeout(cleanup, FADE_MS + 120);
   };
 
-  // 念のため回数制限（無限ループ防止）
-  let guard = 120;
-  while (isOverflowing() && fontSize > minPx && guard-- > 0) {
-    fontSize = Math.max(minPx, fontSize - 0.25);
-    titleEl.style.fontSize = `${fontSize}px`;
-  }
-}
+  toast.setAttribute("aria-hidden", "false");
+  requestAnimationFrame(() => {
+    toast.classList.add("is-show");
+  });
 
-function runCtaTitleFit() {
-  const title = document.querySelector(".cta__title");
-  // PC/タブレットでは元の見た目を維持（縮小はSPでのみ有効化）
-  const isSp = window.matchMedia?.("(max-width: 600px)")?.matches === true;
-  if (!isSp) {
-    if (title) title.style.fontSize = "";
-    return;
-  }
-
-  fitCtaTitleToWidth(title, { minPx: 10 });
-}
-
-function runSplash() {
-  const splash = document.getElementById("splash");
-  if (!splash) return;
-
-  const reduce = prefersReducedMotion();
-  const START_WHITE_MS = 180; // 最初は白背景だけ見せる
-  const FADE_IN_MS = 450;
-  const HOLD_MS = 2000; // 表示時間（要望：2sほど）
-  const FADE_OUT_MS = 450;
-
-  splash.setAttribute("aria-hidden", "false");
-  document.body.classList.add("is-splash-open");
-
-  // 最初は白背景のみ（中身はCSSでopacity:0）→ 少し待って中身をフェードイン
-  window.setTimeout(() => {
-    requestAnimationFrame(() => {
-      splash.classList.add("is-active");
-    });
-  }, reduce ? 0 : START_WHITE_MS);
-
-  const totalWait = (reduce ? 0 : START_WHITE_MS + FADE_IN_MS) + HOLD_MS;
-  window.setTimeout(() => {
-    // フェードアウト
-    splash.classList.add("is-exiting");
-    splash.classList.remove("is-active");
-
-    const cleanup = () => {
-      splash.removeEventListener("transitionend", cleanup);
-      splash.remove();
-      document.body.classList.remove("is-splash-open");
-    };
-
-    if (reduce) {
-      cleanup();
-      return;
-    }
-
-    splash.addEventListener("transitionend", cleanup, { once: true });
-    // transitionend が発火しない場合の保険
-    window.setTimeout(cleanup, FADE_OUT_MS + 120);
-  }, totalWait);
+  if (closeBtn) closeBtn.addEventListener("click", hide, { once: true });
+  window.setTimeout(hide, reduce ? 0 : HOLD_MS + FADE_MS);
 }
 
 function smoothScrollToId(id) {
@@ -152,7 +101,10 @@ function unlockScroll() {
 
 function openModal(workKey) {
   const url = URLS.works[workKey];
-  if (!url) return;
+  if (!url) {
+    alert("この作品のURLが未設定です。script.js の URLS.works を設定してください。");
+    return;
+  }
 
   lastActiveElement = document.activeElement;
 
@@ -201,12 +153,8 @@ document.querySelectorAll("[data-work]").forEach((btn) => {
   });
 });
 
-// CTAリンク（春LP）
-document.querySelectorAll("[data-spring-link]").forEach((a) => {
-  a.setAttribute("href", URLS.springLP);
-  a.setAttribute("target", "_blank");
-  a.setAttribute("rel", "noopener noreferrer");
-});
+// 起動時：告知（フェードイン→少し表示→フェードアウト）
+runAnnouncementToast();
 
 // 閉じる：× / 背景
 modal.querySelectorAll("[data-modal-close]").forEach((el) => {
@@ -251,23 +199,3 @@ window.addEventListener("resize", () => {
   if (!modal.classList.contains("is-open")) return;
   document.body.style.top = `-${scrollY}px`;
 });
-
-// 起動時：スプラッシュ（フェードイン→少し表示→フェードアウト）
-runSplash();
-// CTAタイトル：PC→タブレット→SPで意図しない改行が出ないように、はみ出し時は自動縮小
-// 初期レイアウト確定後に当てる（フォント/描画タイミング差の吸収）
-requestAnimationFrame(() => requestAnimationFrame(runCtaTitleFit));
-window.setTimeout(runCtaTitleFit, 250);
-window.addEventListener("resize", () => {
-  window.clearTimeout(runCtaTitleFit._t);
-  runCtaTitleFit._t = window.setTimeout(runCtaTitleFit, 120);
-});
-// フォント読み込み後に幅が変わってクリップされるのを防ぐ
-window.addEventListener("load", runCtaTitleFit);
-document.fonts?.ready?.then?.(runCtaTitleFit);
-// ブレイクポイント切替の瞬間にも追従（SP切替時のクリップ対策）
-window.matchMedia?.("(max-width: 600px)")?.addEventListener?.("change", () => {
-  requestAnimationFrame(() => requestAnimationFrame(runCtaTitleFit));
-});
-
-

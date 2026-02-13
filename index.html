@@ -2,13 +2,9 @@
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#004433" />
     <title>生徒のバイブコーディング作品紹介｜BeEngineer</title>
-    <script>
-      // JS無効時にスプラッシュが残り続けないよう、JSが動く環境だけ表示制御する
-      document.documentElement.classList.add("js");
-    </script>
     <meta
       name="description"
       content="プログラミング未経験から始めた生徒たちが、AIと一緒に作り上げた作品集。"
@@ -22,27 +18,13 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <!-- Page transition splash -->
-    <div class="splash" id="splash" aria-hidden="true">
-      <div class="splash__inner">
-        <img
-          class="splash__logo"
-          src="img/logo_color.svg"
-          alt="BeEngineer"
-          width="240"
-          height="62"
-          decoding="async"
-          loading="eager"
-        />
-        <div class="splash__copy" aria-label="VIBE CODING スプラッシュ">
-          <div class="splash__rule" aria-hidden="true"></div>
-          <p class="splash__title">VIBE CORDING</p>
-          <p class="splash__sub">AIでWebサイトを作ってみよう！</p>
-          <p class="splash__date">2/11水・祝：開催！</p>
-          <p class="splash__date">11:00~12:30／14:00~15:30</p>
-          <p class="splash__note">※申し込み受付中！</p>
-          <div class="splash__rule" aria-hidden="true"></div>
-        </div>
+    <!-- Page load announcement (fade in/out) -->
+    <div class="announceToast" id="announceToast" role="status" aria-live="polite" aria-hidden="true">
+      <div class="announceToast__card">
+        <p class="announceToast__line">2〜3月、イベント実施中！</p>
+        <p class="announceToast__line">まだまだ申込可能！</p>
+        <p class="announceToast__line">ご参加ください！</p>
+        <button class="announceToast__close" type="button" aria-label="閉じる">×</button>
       </div>
     </div>
 
@@ -71,7 +53,7 @@
         </a>
 
         <div class="header__noticeWrap" aria-label="お知らせ">
-          <p class="header__notice">申し込み受付中！</p>
+          <p class="header__notice">イベント実施中・参加受付中</p>
         </div>
 
         <nav class="header__nav" aria-label="ページ内ナビゲーション">
@@ -81,8 +63,8 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="navlink__line">無料体験</span>
-            <span class="navlink__line">申し込む</span>
+            <span class="navlink__line">イベント</span>
+            <span class="navlink__line">申込</span>
           </a>
         </nav>
       </div>
@@ -104,20 +86,20 @@
       <section class="works" id="works" aria-label="作品紹介">
         <div class="container">
           <header class="sectionHead">
-            <h2 class="sectionHead__title">作品紹介</h2>
+            <h2 class="sectionHead__title">参加者の作品</h2>
             <p class="sectionHead__sub">
-              たった１時間でこのクオリティのページを作成し、公開までしました！
+              当日の参加者が作ったWebサイトを紹介します。カードからプレビューできます。
             </p>
           </header>
 
           <div class="steps" role="list">
             <article class="workCard workCard--step1" role="listitem">
               <div class="workCard__meta">
-                <span class="workCard__student">中学１年生（１年目）</span>
+                <span class="workCard__student">参加者 01</span>
               </div>
-              <h3 class="workCard__title">Programming Language Website</h3>
+              <h3 class="workCard__title">ARK 攻略ガイド - 恐竜世界で生き残れ</h3>
               <p class="workCard__desc">
-                伝えたい内容を整理して、シンプルに“見せる”ところからスタート。
+                ARK: Survival Evolvedの初心者〜中級者向け攻略ガイド。テイム、キブル、探索、拠点づくり、農業などの基本を分かりやすく解説。
               </p>
               <button class="btn btn--card" type="button" data-work="work1">
                 作品を見る
@@ -126,16 +108,12 @@
 
             <article class="workCard workCard--step2" role="listitem">
               <div class="workCard__meta">
-                <span class="workCard__student">中学３年生（２年目）</span>
+                <span class="workCard__student">参加者 02</span>
               </div>
-              <h3 class="workCard__title">Ghost Website</h3>
+              <h3 class="workCard__title">トイレの世界へようこそ | トイレ情報サイト</h3>
               <p class="workCard__desc">
-                世界観と情報設計を両立しながら、見せ方・動き・導線をアップデート。
+                トイレの種類・匂い・性能を分かりやすく紹介する情報サイトです。洋式・和式・タンクレス・温水洗浄便座の違いや特徴を比較できます。
               </p>
-              <ul class="workCard__points" aria-label="ポイント">
-                <li>世界観のあるデザイン</li>
-                <li>よりリッチな体験</li>
-              </ul>
               <button class="btn btn--card" type="button" data-work="work2">
                 作品を見る
               </button>
@@ -143,44 +121,66 @@
 
             <article class="workCard workCard--step3" role="listitem">
               <div class="workCard__meta">
-                <span class="workCard__student">高校１年生（２年目）</span>
+                <span class="workCard__student">参加者 03</span>
               </div>
-              <h3 class="workCard__title">Japanese Castles Website</h3>
+              <h3 class="workCard__title">MOTHER - すこし ふしぎな 世界へ。</h3>
               <p class="workCard__desc">
-                ビジュアルと情報量を両立し、没入感のある“体験”として仕上げた最終STEP。
+                ゲームシリーズ「MOTHER」の世界観・歴史・キャラクター・敵・グッズ情報をまとめたファンサイト。
               </p>
-              <div class="workCard__stats" aria-label="成長の目安">
-                <div class="stat">
-                  <span class="stat__k">UI密度</span><span class="stat__v">高</span>
-                </div>
-                <div class="stat">
-                  <span class="stat__k">表現</span><span class="stat__v">リッチ</span>
-                </div>
-              </div>
               <button class="btn btn--card btn--card-strong" type="button" data-work="work3">
                 作品を見る
               </button>
             </article>
+
+            <article class="workCard workCard--step1" role="listitem">
+              <div class="workCard__meta">
+                <span class="workCard__student">参加者 04</span>
+              </div>
+              <h3 class="workCard__title">みどりの効果と種類 | MIDORI</h3>
+              <p class="workCard__desc">
+                緑がもたらす癒しと自然の魅力を紹介。リラックス効果、目の疲れ軽減、集中力向上など緑の力を解説します。
+              </p>
+              <button class="btn btn--card" type="button" data-work="work4">
+                作品を見る
+              </button>
+            </article>
+
+            <article class="workCard workCard--step2" role="listitem">
+              <div class="workCard__meta">
+                <span class="workCard__student">参加者 05</span>
+              </div>
+              <h3 class="workCard__title">GORILLA INTELLIGENCE | ゴリラの知性と未来</h3>
+              <p class="workCard__desc">
+                ゴリラの生態・研究・知性・保護活動を美しいビジュアルとともに紹介する特設サイト。人間に最も近い知性を持つ存在、ゴリラの世界へ。
+              </p>
+              <button class="btn btn--card" type="button" data-work="work5">
+                作品を見る
+              </button>
+            </article>
+
           </div>
         </div>
       </section>
 
-      <section class="cta" id="cta" aria-label="CTA（無料体験）">
+      <section class="cta" id="join" aria-label="参加したかった方向け案内">
         <div class="container cta__inner">
           <div class="cta__copy">
-            <h2 class="cta__title">
-              <span class="cta__titleLine">バイブコーディングに挑戦したい方はこちら！</span>
-              <span class="cta__titleLine">春の無料体験会 開催中</span>
-            </h2>
+            <h2 class="cta__title">参加したかった方へ</h2>
             <p class="cta__sub">
-              初心者でもOK。<br class="only-sp">AIと一緒に、最初の一歩を踏み出しましょう。
+              「参加したかった。」「自分だけのWebページを作りたかった。」という方も大歓迎です。
+              イベント情報・申し込みはこちらからご確認ください。
             </p>
           </div>
           <div class="cta__actions">
-            <a class="btn btn--cta" href="#" data-spring-link>
-              <span class="btn__line">無料体験に申し込む</span>
-              <span class="btn__sub">※申し込み受付中！<br>（申込ページへ移動します）</span>
+            <a
+              class="btn btn--cta"
+              href="https://lp.be-engineer.tech/pages/new_year_2026.html?utm_source=flyer&utm_medium=offline&utm_campaign=spring_event_2026&utm_term=programming_camp&utm_content=text_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              参加を申し込む
             </a>
+            <p class="cta__note">※申込ページ（別タブ）へ移動します</p>
           </div>
         </div>
       </section>

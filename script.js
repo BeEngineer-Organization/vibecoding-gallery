@@ -3,20 +3,32 @@
  */
 const URLS = {
   works: {
-    work1: "https://v0-ark-beta.vercel.app/",
-    work2: "https://v0-toilet-information-website.vercel.app/",
-    work3: "https://v0-mother-website-build.vercel.app/",
-    work4: "https://v0-green-site-requirements.vercel.app/",
-    work5: "https://v0-gorilla-website-mu.vercel.app/",
+    work1: "https://v0-swimming-website-requirements.vercel.app/",
+    work2: "https://v0-fake-news-detection-ashen.vercel.app/",
+    work3: "https://v0-rare-cell-website.vercel.app/",
+    work4: "https://v0-ark-beta.vercel.app/",
+    work5: "https://v0-toilet-information-website.vercel.app/",
+    work6: "https://v0-mother-website-build.vercel.app/",
+    work7: "https://v0-green-site-requirements.vercel.app/",
+    work8: "https://v0-gorilla-website-mu.vercel.app/",
+    work9: "https://v0-osaka-metro-tourism-website.vercel.app/",
+    work10: "https://v0-kimetsu-no-yaiba-two.vercel.app/",
+    work11: "https://v0-watermelon-toss-game.vercel.app/",
   },
 };
 
 const TITLES = {
-  work1: "ARK 攻略ガイド - 恐竜世界で生き残れ",
-  work2: "トイレの世界へようこそ | トイレ情報サイト",
-  work3: "MOTHER - すこし ふしぎな 世界へ。",
-  work4: "みどりの効果と種類 | MIDORI",
-  work5: "GORILLA INTELLIGENCE | ゴリラの知性と未来",
+  work1: "水泳好きのためのホームページ",
+  work2: "フェイクニュースを見極める方法",
+  work3: "はたらく細胞 レアキャラ図鑑",
+  work4: "ARK 攻略ガイド - 恐竜世界で生き残れ",
+  work5: "トイレの世界へようこそ | トイレ情報サイト",
+  work6: "MOTHER - すこし ふしぎな 世界へ。",
+  work7: "みどりの効果と種類 | MIDORI",
+  work8: "GORILLA INTELLIGENCE | ゴリラの知性と未来",
+  work9: "大阪メトロで冒険しよう！ | 観光地ガイド",
+  work10: "鬼滅の刃紹介ページ",
+  work11: "スイカ投げゲーム | Tapして遊ぶミニゲーム",
 };
 
 const modal = document.getElementById("workModal");
@@ -29,37 +41,6 @@ let scrollY = 0;
 
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
-}
-
-function runAnnouncementToast() {
-  const toast = document.getElementById("announceToast");
-  if (!toast) return;
-
-  const closeBtn = toast.querySelector(".announceToast__close");
-  const reduce = prefersReducedMotion();
-  const FADE_MS = 350;
-  const HOLD_MS = 1800;
-
-  const hide = () => {
-    toast.classList.add("is-hide");
-    toast.classList.remove("is-show");
-    toast.setAttribute("aria-hidden", "true");
-    const cleanup = () => {
-      toast.removeEventListener("transitionend", cleanup);
-      toast.remove();
-    };
-    if (reduce) return cleanup();
-    toast.addEventListener("transitionend", cleanup, { once: true });
-    window.setTimeout(cleanup, FADE_MS + 120);
-  };
-
-  toast.setAttribute("aria-hidden", "false");
-  requestAnimationFrame(() => {
-    toast.classList.add("is-show");
-  });
-
-  if (closeBtn) closeBtn.addEventListener("click", hide, { once: true });
-  window.setTimeout(hide, reduce ? 0 : HOLD_MS + FADE_MS);
 }
 
 function smoothScrollToId(id) {
@@ -154,7 +135,7 @@ document.querySelectorAll("[data-work]").forEach((btn) => {
 });
 
 // 起動時：告知（フェードイン→少し表示→フェードアウト）
-runAnnouncementToast();
+// ページアクセス時の表示は出さない
 
 // 閉じる：× / 背景
 modal.querySelectorAll("[data-modal-close]").forEach((el) => {

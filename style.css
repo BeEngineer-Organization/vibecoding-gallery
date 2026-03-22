@@ -35,7 +35,62 @@ a{ color: inherit; text-decoration: none; }
 button{ font: inherit; }
 
 .splash{
-  /* removed */
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 19, 15, .18);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .45s ease, visibility .45s ease;
+}
+.splash.is-visible{
+  opacity: 1;
+  visibility: visible;
+}
+.splash__inner{
+  width: 100%;
+  max-width: 560px;
+  padding: 28px 24px;
+  border-radius: 24px;
+  text-align: center;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(0, 68, 51, .96), rgba(0, 68, 51, .90));
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 24px 70px rgba(0,0,0,.28);
+  transform: translateY(10px) scale(.98);
+  transition: transform .45s ease;
+}
+.splash.is-visible .splash__inner{
+  transform: translateY(0) scale(1);
+}
+.splash__eyebrow{
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+.splash__title{
+  margin: 0;
+  display: inline-block;
+  font-size: 36px;
+  line-height: 1.25;
+  font-weight: 900;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 214, 10, .96);
+  text-decoration-thickness: 6px;
+  text-underline-offset: 8px;
+}
+.splash__note{
+  margin: 12px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: .94;
 }
 
 .container{
@@ -835,6 +890,13 @@ body.is-modal-open{
 }
 
 @media (max-width: 600px){
+  .splash__inner{
+    padding: 24px 18px;
+    border-radius: 20px;
+  }
+  .splash__eyebrow{ font-size: 18px; }
+  .splash__title{ font-size: 24px; }
+  .splash__note{ font-size: 14px; }
   /* 全サイズで左右20px（合計40px）を維持する */
   .container{ width: min(var(--container), calc(100% - 40px)); }
   .header__inner{ padding: 10px 0; }

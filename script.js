@@ -14,6 +14,8 @@ const URLS = {
     work9: "https://v0-osaka-metro-tourism-website.vercel.app/",
     work10: "https://v0-kimetsu-no-yaiba-two.vercel.app/",
     work11: "https://v0-watermelon-toss-game.vercel.app/",
+    work12: "https://v0-sekiro-boss-guide.vercel.app/",
+    work13: "https://v0-splatoon-introduction-site.vercel.app/",
   },
 };
 
@@ -29,18 +31,37 @@ const TITLES = {
   work9: "大阪メトロで冒険しよう！ | 観光地ガイド",
   work10: "鬼滅の刃紹介ページ",
   work11: "スイカ投げゲーム | Tapして遊ぶミニゲーム",
+  work12: "SEKIRO 討伐録 | 類い稀な強者の攻略ガイド",
+  work13: "スプラトゥーンの世界へようこそ！",
 };
 
 const modal = document.getElementById("workModal");
 const frame = document.getElementById("workFrame");
 const modalTitle = document.getElementById("modalTitle");
 const openNew = document.getElementById("modalOpenNew");
+const eventSplash = document.getElementById("eventSplash");
 
 let lastActiveElement = null;
 let scrollY = 0;
 
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
+}
+
+function showEventSplash() {
+  if (!eventSplash) return;
+
+  const visibleMs = 3000;
+  eventSplash.setAttribute("aria-hidden", "false");
+
+  window.requestAnimationFrame(() => {
+    eventSplash.classList.add("is-visible");
+  });
+
+  window.setTimeout(() => {
+    eventSplash.classList.remove("is-visible");
+    eventSplash.setAttribute("aria-hidden", "true");
+  }, visibleMs);
 }
 
 function smoothScrollToId(id) {
@@ -180,3 +201,5 @@ window.addEventListener("resize", () => {
   if (!modal.classList.contains("is-open")) return;
   document.body.style.top = `-${scrollY}px`;
 });
+
+window.addEventListener("load", showEventSplash, { once: true });

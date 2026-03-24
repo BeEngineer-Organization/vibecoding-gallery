@@ -40,6 +40,7 @@ const frame = document.getElementById("workFrame");
 const modalTitle = document.getElementById("modalTitle");
 const openNew = document.getElementById("modalOpenNew");
 const eventSplash = document.getElementById("eventSplash");
+const EVENT_SPLASH_END_AT = new Date(2026, 3, 1, 0, 0, 0);
 
 let lastActiveElement = null;
 let scrollY = 0;
@@ -48,11 +49,21 @@ function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
 }
 
+function shouldShowEventSplash() {
+  return new Date() < EVENT_SPLASH_END_AT;
+}
+
 function showEventSplash() {
   if (!eventSplash) return;
+  if (!shouldShowEventSplash()) {
+    eventSplash.setAttribute("aria-hidden", "true");
+    eventSplash.hidden = true;
+    return;
+  }
 
   const visibleMs = 3000;
   eventSplash.setAttribute("aria-hidden", "false");
+  eventSplash.hidden = false;
 
   window.requestAnimationFrame(() => {
     eventSplash.classList.add("is-visible");

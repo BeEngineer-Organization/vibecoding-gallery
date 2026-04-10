@@ -11,6 +11,7 @@
   --radius: 18px;
   --radius2: 22px;
   --container: 1100px;
+  --header-height: 76px;
 }
 
 *{ box-sizing: border-box; }
@@ -18,7 +19,7 @@ html, body{ height: 100%; }
 html{
   scroll-behavior: smooth;
   /* sticky header 分の余白（アンカー移動時に見出しが隠れないように） */
-  scroll-padding-top: 78px;
+  scroll-padding-top: calc(var(--header-height) + 12px);
 }
 body{
   margin: 0;
@@ -29,69 +30,11 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  padding-top: var(--header-height);
 }
 
 a{ color: inherit; text-decoration: none; }
 button{ font: inherit; }
-
-.splash{
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgba(4, 19, 15, .18);
-  backdrop-filter: blur(8px);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .45s ease, visibility .45s ease;
-}
-.splash.is-visible{
-  opacity: 1;
-  visibility: visible;
-}
-.splash__inner{
-  width: 100%;
-  max-width: 560px;
-  padding: 28px 24px;
-  border-radius: 24px;
-  text-align: center;
-  color: #fff;
-  background:
-    linear-gradient(180deg, rgba(0, 68, 51, .96), rgba(0, 68, 51, .90));
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 24px 70px rgba(0,0,0,.28);
-  transform: translateY(10px) scale(.98);
-  transition: transform .45s ease;
-}
-.splash.is-visible .splash__inner{
-  transform: translateY(0) scale(1);
-}
-.splash__eyebrow{
-  margin: 0 0 10px;
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: .06em;
-}
-.splash__title{
-  margin: 0;
-  display: inline-block;
-  font-size: 36px;
-  line-height: 1.25;
-  font-weight: 900;
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 214, 10, .96);
-  text-decoration-thickness: 6px;
-  text-underline-offset: 8px;
-}
-.splash__note{
-  margin: 12px 0 0;
-  font-size: 15px;
-  font-weight: 700;
-  opacity: .94;
-}
 
 .container{
   width: min(var(--container), calc(100% - 40px));
@@ -121,8 +64,11 @@ button{ font: inherit; }
 
 /* Header */
 .header{
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 50;
   background: rgba(255,255,255,.86);
   border-bottom: 1px solid rgba(0, 68, 51, .10);
@@ -383,7 +329,7 @@ button{ font: inherit; }
 /* Section head */
 .works{
   padding: 10px 0;
-  scroll-margin-top: 78px;
+  scroll-margin-top: calc(var(--header-height) + 12px);
 }
 .sectionHead{
   display: grid;
@@ -890,13 +836,9 @@ body.is-modal-open{
 }
 
 @media (max-width: 600px){
-  .splash__inner{
-    padding: 24px 18px;
-    border-radius: 20px;
+  :root{
+    --header-height: 68px;
   }
-  .splash__eyebrow{ font-size: 18px; }
-  .splash__title{ font-size: 24px; }
-  .splash__note{ font-size: 14px; }
   /* 全サイズで左右20px（合計40px）を維持する */
   .container{ width: min(var(--container), calc(100% - 40px)); }
   .header__inner{ padding: 10px 0; }
@@ -942,8 +884,6 @@ body.is-modal-open{
   *{ scroll-behavior: auto !important; }
   .bar::after{ animation: none; }
   .workCard, .btn{ transition: none; }
-  .splash{ transition: none; }
-  .splash__inner{ transition: none; }
 }
 
 

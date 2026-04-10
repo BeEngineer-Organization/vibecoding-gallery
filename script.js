@@ -16,6 +16,8 @@ const URLS = {
     work11: "https://v0-watermelon-toss-game.vercel.app/",
     work12: "https://v0-sekiro-boss-guide.vercel.app/",
     work13: "https://v0-splatoon-introduction-site.vercel.app/",
+    work14: "https://v0-game-landing-page-nine.vercel.app/",
+    work15: "https://v0-minecraft-nine-pi.vercel.app/",
   },
 };
 
@@ -33,46 +35,20 @@ const TITLES = {
   work11: "スイカ投げゲーム | Tapして遊ぶミニゲーム",
   work12: "SEKIRO 討伐録 | 類い稀な強者の攻略ガイド",
   work13: "スプラトゥーンの世界へようこそ！",
+  work14: "Super Smash Bros - Wario Edition",
+  work15: "Minecraft紹介 - 広がる世界、無限の冒険",
 };
 
 const modal = document.getElementById("workModal");
 const frame = document.getElementById("workFrame");
 const modalTitle = document.getElementById("modalTitle");
 const openNew = document.getElementById("modalOpenNew");
-const eventSplash = document.getElementById("eventSplash");
-const EVENT_SPLASH_END_AT = new Date(2026, 3, 1, 0, 0, 0);
 
 let lastActiveElement = null;
 let scrollY = 0;
 
 function prefersReducedMotion() {
   return window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches === true;
-}
-
-function shouldShowEventSplash() {
-  return new Date() < EVENT_SPLASH_END_AT;
-}
-
-function showEventSplash() {
-  if (!eventSplash) return;
-  if (!shouldShowEventSplash()) {
-    eventSplash.setAttribute("aria-hidden", "true");
-    eventSplash.hidden = true;
-    return;
-  }
-
-  const visibleMs = 3000;
-  eventSplash.setAttribute("aria-hidden", "false");
-  eventSplash.hidden = false;
-
-  window.requestAnimationFrame(() => {
-    eventSplash.classList.add("is-visible");
-  });
-
-  window.setTimeout(() => {
-    eventSplash.classList.remove("is-visible");
-    eventSplash.setAttribute("aria-hidden", "true");
-  }, visibleMs);
 }
 
 function smoothScrollToId(id) {
@@ -166,9 +142,6 @@ document.querySelectorAll("[data-work]").forEach((btn) => {
   });
 });
 
-// 起動時：告知（フェードイン→少し表示→フェードアウト）
-// ページアクセス時の表示は出さない
-
 // 閉じる：× / 背景
 modal.querySelectorAll("[data-modal-close]").forEach((el) => {
   el.addEventListener("click", closeModal);
@@ -213,4 +186,3 @@ window.addEventListener("resize", () => {
   document.body.style.top = `-${scrollY}px`;
 });
 
-window.addEventListener("load", showEventSplash, { once: true });

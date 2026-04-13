@@ -18,6 +18,9 @@ const URLS = {
     work13: "https://v0-splatoon-introduction-site.vercel.app/",
     work14: "https://v0-game-landing-page-nine.vercel.app/",
     work15: "https://v0-minecraft-nine-pi.vercel.app/",
+    work16: "https://v0-volleyball-learning-page.vercel.app/",
+    work17: "https://v0-world-heritage-site-chi.vercel.app/",
+    work18: "https://v0-world-heritage-map.vercel.app/",
   },
 };
 
@@ -37,6 +40,9 @@ const TITLES = {
   work13: "スプラトゥーンの世界へようこそ！",
   work14: "Super Smash Bros - Wario Edition",
   work15: "Minecraft紹介 - 広がる世界、無限の冒険",
+  work16: "バレーボール 強いチームの特徴 | 練習の違いを解説",
+  work17: "世界無形遺産｜日本文化紹介",
+  work18: "日本の世界遺産マップ | 地図から探す日本の世界遺産",
 };
 
 const modal = document.getElementById("workModal");

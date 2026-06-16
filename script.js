@@ -21,6 +21,12 @@ const URLS = {
     work16: "https://v0-volleyball-learning-page.vercel.app/",
     work17: "https://v0-world-heritage-site-chi.vercel.app/",
     work18: "https://v0-world-heritage-map.vercel.app/",
+    work19: "https://v0-minecraft-introduction-page.vercel.app/",
+    work20: "https://v0-self-introduction-page-nine.vercel.app/",
+    work21: "https://v0-pc-sigma.vercel.app/",
+    work22: "https://v0-project-six-xi-79.vercel.app/",
+    work23: "https://v0-minecraft-mob-guide.vercel.app/",
+    work24: "https://v0-project-bay-six-ntzuk0qnki.vercel.app/",
   },
 };
 
@@ -43,6 +49,12 @@ const TITLES = {
   work16: "バレーボール 強いチームの特徴 | 練習の違いを解説",
   work17: "世界無形遺産｜日本文化紹介",
   work18: "日本の世界遺産マップ | 地図から探す日本の世界遺産",
+  work19: "マイクラの魅力を紹介 | Minecraft紹介ページ",
+  work20: "My Profile | 自己紹介",
+  work21: "PC選びガイド | 用途別おすすめパソコン紹介",
+  work22: "新潟鉄道紀行 | 和の情緒と鉄道旅",
+  work23: "Minecraft 敵モブ図鑑 | 攻略情報",
+  work24: "北欧神話ビジュアルガイド | 神と巨人の関係がわかる神話サイト",
 };
 
 const modal = document.getElementById("workModal");
